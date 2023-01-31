@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{msg}}</h1>
+  <div x-data="{ count: 0 }">
+      <input type="number" x-model="count" />
+      <button @click="count++">Increment</button>
+      <button @click="count *= count"> Square</button>
+  
+      <span x-text="count"></span>
+  </div>
+  <div x-data="{
+    people: [],
+    showImages: false}"
+    x-init="people = await (await fetch('/people/')).json()">
+
+    <button @click="showImages = !showImages"
+      x-text="showImages ? 'Hide Images' : 'Show Images'"></button>
+
+    <template x-for="person in people">
+      <div>
+        <p x-text="person.name"
+           :class="person.name.startsWith('M') ? 'has-text-danger' : 'has-text-success'"></p>
+        <img x-show="showImages" :src="person.image" x-transition.duration.1500ms>
+      </div>
+    </template>
+
+  </div>
+{% endblock content %}
